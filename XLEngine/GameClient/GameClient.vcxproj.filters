@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>00_GameApp</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryPoint.cpp">
+      <Filter>01_ETC</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameApp.h">
+      <Filter>00_GameApp</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>01_ETC</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="00_GameApp">
+      <UniqueIdentifier>{29b30996-1409-4beb-8a81-78001816fb61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_ETC">
+      <UniqueIdentifier>{fd819055-3272-4a2d-9a6b-7aad32de5ec0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

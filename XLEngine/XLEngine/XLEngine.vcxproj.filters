@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="EngineApp.h">
+      <Filter>0_EngineApp</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11Core.h">
+      <Filter>3_D3D11Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>1_Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>2_Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>2_Components</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11Common.h">
+      <Filter>5_ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EngineApp.cpp">
+      <Filter>0_EngineApp</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11Core.cpp">
+      <Filter>3_D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>1_Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometry.cpp">
+      <Filter>2_Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>2_Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneObject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="0_EngineApp">
+      <UniqueIdentifier>{a9f0712e-4637-4950-bbb4-9d94a7fc8471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Renderer">
+      <UniqueIdentifier>{db3617ac-af9f-42f0-860f-ccb27825d787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Components">
+      <UniqueIdentifier>{9085cf19-0d95-4450-b695-f52e238e9d45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3_D3D11Core">
+      <UniqueIdentifier>{eb555557-1b8c-4a2b-a2c3-650a9ba49fa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Shaders">
+      <UniqueIdentifier>{70d16800-f1c9-4712-beb7-f86028dd781a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5_ETC">
+      <UniqueIdentifier>{419cc575-e7e7-4c7b-b9c2-0151563b13e9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>4_Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>4_Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
