@@ -1,17 +1,15 @@
 #include "Renderer.h"
 #include <vector>
+#include "Scene.h"
 
-Renderer::Renderer()
-	: core { std::make_unique<D3D11Core>() },
-	testScene{ std::make_unique<Scene>() }
+#include "Geometry.h"
+#include "Material.h"
+
+#include <memory>
+
+void Renderer::Initialize(D3D11Core & _core)
 {
-
-}
-
-void Renderer::Initialize(HWND hWnd)
-{
-	// initialize core
-	core->Initialize(hWnd);
+	core = &_core;
 
 	// cache d3d resources
 	device = core->GetDevice();
@@ -19,19 +17,20 @@ void Renderer::Initialize(HWND hWnd)
 	swapChain = core->GetSwapChain();
 	backBufferView = core->GetBackBufferVew();
 
-	// intialize scene
-	testScene->Initialize(core.get());
-	
 	ConfigurePipelineStates();
 }
 
-void Renderer::Update()
+void Renderer::Draw(Scene & _scene)
 {
 	// bind and clear backbuffer
 	core->BeginFrame();
 
-	// draw
-	deviceContext->DrawIndexed(testScene->GetNumIndices(), 0, 0);	// 씬에 다수의 오브젝트가 있다면? 25. 5. 17.
+	// render scene
+	for (auto& object : _scene.GetObjects())
+	{
+		BindObjects(object);
+		deviceContext->DrawIndexed(static_cast<UINT>(object->GetNumIndices()), 0, 0);
+	}
 
 	// present
 	core->EndFrame();
@@ -47,7 +46,6 @@ void Renderer::ConfigurePipelineStates()
 	// Primitive Topology
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-
 	// Rasterizer State
 	CD3D11_RASTERIZER_DESC rasterDesc{ D3D11_DEFAULT };
 	rasterDesc.DepthClipEnable = false;
@@ -56,11 +54,9 @@ void Renderer::ConfigurePipelineStates()
 	result = device->CreateRasterizerState(&rasterDesc, rasterizerState.put());
 	deviceContext->RSSetState(rasterizerState.get());
 
-
 	// Viewport
 	D3D11_VIEWPORT viewport { 0, 0, core->GetScreenSize().width, core->GetScreenSize().height, 0, 1};
 	deviceContext->RSSetViewports(1, &viewport);
-
 
 	//winrt::com_ptr<ID3D11Texture2D> depthStencilBuffer;
 	//winrt::com_ptr<ID3D11DepthStencilView> depthStencilView;
@@ -70,4 +66,24 @@ void Renderer::ConfigurePipelineStates()
 	//winrt::com_ptr<ID3D11SamplerState> samplerState;
 	//deviceContext->OMSetDepthStencilState(depthStencilState.get(), 0);
 	//deviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
+}
+
+void Renderer::BindObjects(const std::unique_ptr<SceneObject>& _object)
+{
+	// bind material
+	const auto& material = _object->GetMaterial();
+
+	deviceContext->IASetInputLayout(material->GetInputLayout());
+	deviceContext->VSSetShader(material->GetVS(), nullptr, 0);
+	deviceContext->PSSetShader(material->GetPS(), nullptr, 0);
+
+
+	// bind geometry
+	const auto& geometry = _object->GetGeometry();
+
+	ID3D11Buffer* vb = geometry->GetVB();
+	ID3D11Buffer* ib = geometry->GetIB();
+
+	deviceContext->IASetVertexBuffers(0, 1, &vb, &geometry->GetStride(), &geometry->GetOffset());
+	deviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
 }

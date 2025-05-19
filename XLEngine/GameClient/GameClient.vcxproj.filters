@@ -7,6 +7,12 @@
     <ClCompile Include="EntryPoint.cpp">
       <Filter>01_ETC</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>02_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObject.cpp">
+      <Filter>02_Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -15,6 +21,12 @@
     <ClInclude Include="framework.h">
       <Filter>01_ETC</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>02_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObject.h">
+      <Filter>02_Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_GameApp">
@@ -22,6 +34,9 @@
     </Filter>
     <Filter Include="01_ETC">
       <UniqueIdentifier>{fd819055-3272-4a2d-9a6b-7aad32de5ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Scene">
+      <UniqueIdentifier>{c54ba48a-04fa-4c28-9e0c-8f984206cf84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="EngineApp.h">
-      <Filter>0_EngineApp</Filter>
-    </ClInclude>
     <ClInclude Include="D3D11Core.h">
       <Filter>3_D3D11Core</Filter>
     </ClInclude>
@@ -17,15 +14,16 @@
       <Filter>2_Components</Filter>
     </ClInclude>
     <ClInclude Include="D3D11Common.h">
-      <Filter>5_ETC</Filter>
+      <Filter>9_ETC</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="Builder.h">
+      <Filter>5_Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>0_Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EngineApp.cpp">
-      <Filter>0_EngineApp</Filter>
-    </ClCompile>
     <ClCompile Include="D3D11Core.cpp">
       <Filter>3_D3D11Core</Filter>
     </ClCompile>
@@ -38,13 +36,14 @@
     <ClCompile Include="Material.cpp">
       <Filter>2_Components</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneObject.cpp" />
+    <ClCompile Include="Builder.cpp">
+      <Filter>5_Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>0_Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="0_EngineApp">
-      <UniqueIdentifier>{a9f0712e-4637-4950-bbb4-9d94a7fc8471}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Renderer">
       <UniqueIdentifier>{db3617ac-af9f-42f0-860f-ccb27825d787}</UniqueIdentifier>
     </Filter>
@@ -57,8 +56,14 @@
     <Filter Include="4_Shaders">
       <UniqueIdentifier>{70d16800-f1c9-4712-beb7-f86028dd781a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="5_ETC">
+    <Filter Include="9_ETC">
       <UniqueIdentifier>{419cc575-e7e7-4c7b-b9c2-0151563b13e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5_Builder">
+      <UniqueIdentifier>{41b4e7e4-d88c-4f3c-bdba-e8151d4633b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0_Engine">
+      <UniqueIdentifier>{a9f0712e-4637-4950-bbb4-9d94a7fc8471}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

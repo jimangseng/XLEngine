@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../XLEngine/EngineApp.h"
+#include "Engine.h"
+#include "Scene.h"
 
 /*
 * 게임 클라이언트 어플리케이션 진입점.
@@ -20,5 +21,6 @@ public:
 	void Finalize();
 
 private:
-	EngineApp engine;
+	Engine engine;
+	Scene currentScene;
 };

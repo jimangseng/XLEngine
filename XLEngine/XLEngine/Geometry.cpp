@@ -3,6 +3,11 @@
 
 #include "Geometry.h"
 
+bool Geometry::Initialize()
+{
+	return false;
+}
+
 bool Geometry::Finalize()
 {
 	return false;
