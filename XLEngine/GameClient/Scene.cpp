@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "Geometry.h"
+#include "Triangle.h"
+#include "Transform.h"
 
 Scene::Scene()
 	: renderer{ },
@@ -17,33 +19,26 @@ void Scene::Initialize(Renderer& _renderer, Builder& _builder)
 	renderer = &_renderer;
 	builder = &_builder;
 
-	// Primitive로 데이터 구조 정의
-	std::vector<Geometry::Vertex> vertices
-	{
-		{ { 0.0f, 0.5f, 0.1f }, { 1.f, 0.f, 0.f, 1.f } },
-		{ { 0.5f, -0.5f, 0.1f }, { 0.f, 1.f, 0.f, 1.f } },
-		{ { -0.5f, -0.5f, 0.1f }, { 0.f, 0.f, 1.f, 1.f } }
-	};
+	// triangle object
+	auto triangle = std::make_shared<Triangle>();
 
-	std::vector<UINT32> indices { 0, 1, 2 };
+	// build geometry and material
+	auto geometry{ builder->BuildGeometry(triangle->GetVertices(), triangle->GetIndices()) };
+	auto material{ builder->BuildMaterial(triangle->GetLayout()) };
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> layout
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Geometry::Vertex, position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Geometry::Vertex, color), D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
+	// set first object
+	auto obj1 = std::make_unique<SceneObject>();
+	obj1->SetGeometry(geometry);
+	obj1->SetMaterial(material);
 
-	// Builder를 통해 Geometry와 Material 생성 -> Vertex 구조, Inputlayout에 대한 고민 25. 5. 19. jimangseng
-	auto geometry{ builder->BuildGeometry(vertices, indices) };
-	auto material{ builder->BuildMaterial(layout) };
+	auto obj2 = std::make_unique<SceneObject>();
+	obj2->SetGeometry(geometry);
+	obj2->SetMaterial(material);
+	obj2->SetPosition(Math::Vector3{ 0.2f, 0.0f, 0.0f });
 
-	// 만들어진 Geometry와 Material을 오브젝트에 연결하고 오브젝트 목록(씬 그래프)에 넣는다.
-	auto object{ std::make_unique<SceneObject>() };
-	object->Initialize();
-	object->SetGeometry(std::move(geometry));
-	object->SetMaterial(std::move(material));
-
-	objects.push_back(std::move(object));
+	// add object to vector
+	objects.push_back(std::move(obj1));
+	objects.push_back(std::move(obj2));
 }
 	
 void Scene::Update()

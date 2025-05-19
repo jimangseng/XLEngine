@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Geometry.h"
+#include "Triangle.h"
+#include "Transform.h"
 
 class D3D11Core;
 class Material;
@@ -24,19 +26,26 @@ public:
 	void Finalize();
 
 public:
-	void SetGeometry(std::unique_ptr<Geometry> _geometry);
-	void SetMaterial(std::unique_ptr<Material> _material);
+	void SetGeometry(std::shared_ptr<Geometry> _geometry);
+	void SetMaterial(std::shared_ptr<Material> _material);
+	void SetPrimitive(std::shared_ptr<Triangle> _triangle) { triangle = _triangle; }
+
+	// Transform 관련
+	void SetPosition(Math::Vector3 _position) { transform.position = _position; }
 
 public:
 	size_t GetNumIndices() const { return geometry->GetNumIndices(); }
-	const std::unique_ptr<Geometry>& GetGeometry() { return geometry; }
-	const std::unique_ptr<Material>& GetMaterial() { return material; }
+	const std::shared_ptr<Geometry>& GetGeometry() { return geometry; }
+	const std::shared_ptr<Material>& GetMaterial() { return material; }
+	const std::shared_ptr<Triangle>& GetPrimitive() { return triangle; }
 
 private:
-	// Transform transform;		// 25. 5. 19. 추가 예정
-	std::unique_ptr<Geometry> geometry;
-	std::unique_ptr<Material> material;
+	Transform transform;
+	std::shared_ptr<Geometry> geometry;
+	std::shared_ptr<Material> material;
 
 	size_t numIndices;
+
+	std::shared_ptr<Triangle> triangle;
 };
 

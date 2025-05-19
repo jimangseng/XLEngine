@@ -9,13 +9,6 @@
 class Geometry
 {
 public:
-	struct Vertex
-	{
-		DirectX::XMFLOAT3 position{};
-		DirectX::XMFLOAT4 color{};
-	};
-
-public:
 	Geometry() = default;
 	~Geometry() = default;
 	Geometry(const Geometry&) = default;	// todo: 복사생성자, 복사 대입 연산자 구현하기

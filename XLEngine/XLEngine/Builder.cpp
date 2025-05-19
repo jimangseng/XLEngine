@@ -7,54 +7,7 @@ void Builder::Initialize(D3D11Core& _core)
 	core = &_core;
 }
 
-std::unique_ptr<Geometry> Builder::BuildGeometry(const std::vector<Geometry::Vertex>& _vertices, const std::vector<UINT32>& _indices) const
-{
-	ID3D11Device* device{ core->GetDevice() };
-	HRESULT result{};
-
-	// create vertex buffer
-	CD3D11_BUFFER_DESC VBDesc{};
-	VBDesc.ByteWidth = static_cast<UINT> (sizeof(Geometry::Vertex) * _vertices.size());
-	VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA VBData{};
-	VBData.pSysMem = _vertices.data();
-
-	winrt::com_ptr<ID3D11Buffer> vertexBuffer{};
-	result = device->CreateBuffer(&VBDesc, &VBData, vertexBuffer.put());
-
-	// create index buffer
-	CD3D11_BUFFER_DESC IBDesc{};
-	IBDesc.ByteWidth = static_cast<UINT>(_indices.size() * sizeof(UINT32));
-	IBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	IBDesc.StructureByteStride = static_cast<UINT> (sizeof(UINT32));
-
-	D3D11_SUBRESOURCE_DATA IBData
-	{
-		_indices.data(),
-		0,
-		0
-	};
-
-	winrt::com_ptr<ID3D11Buffer> indexBuffer{};
-	result = device->CreateBuffer(&IBDesc, &IBData, indexBuffer.put());
-
-
-	// make geometry struct
-	auto geometry = std::make_unique<Geometry>();
-
-	geometry->SetStride(sizeof(Geometry::Vertex));
-	geometry->SetOffset(0);
-
-	geometry->SetVB(vertexBuffer);
-	geometry->SetIB(indexBuffer);
-
-	geometry->SetNumIndices(_indices.size());
-
-	return geometry;
-}
-
-std::unique_ptr<Material> Builder::BuildMaterial(std::vector<D3D11_INPUT_ELEMENT_DESC> _layout) const
+std::shared_ptr<Material> Builder::BuildMaterial(std::vector<D3D11_INPUT_ELEMENT_DESC> _layout) const
 {
 	ID3D11Device* device{ core->GetDevice() };
 	HRESULT result{};
@@ -77,7 +30,7 @@ std::unique_ptr<Material> Builder::BuildMaterial(std::vector<D3D11_INPUT_ELEMENT
 
 
 	// make material struct
-	auto mat = std::make_unique<Material>();
+	auto mat = std::make_shared<Material>();
 
 	mat->SetVSBlob(vsBlob);
 	mat->SetPSBlob(psBlob);

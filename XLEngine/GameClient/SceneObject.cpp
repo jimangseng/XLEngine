@@ -6,7 +6,8 @@
 SceneObject::SceneObject()
 	:geometry{},
 	material{},
-	numIndices{}
+	numIndices{},
+	triangle{}
 {
 
 }
@@ -31,12 +32,12 @@ void SceneObject::Finalize()
 
 }
 
-void SceneObject::SetGeometry(std::unique_ptr<Geometry> _geometry)
+void SceneObject::SetGeometry(std::shared_ptr<Geometry> _geometry)
 {
-	geometry = std::move(_geometry);
+	geometry = _geometry;
 }
 
-void SceneObject::SetMaterial(std::unique_ptr<Material> _material)
+void SceneObject::SetMaterial(std::shared_ptr<Material> _material)
 {
-	material = std::move(_material);
+	material = _material;
 }
