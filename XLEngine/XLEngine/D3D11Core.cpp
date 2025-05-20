@@ -75,7 +75,7 @@ void D3D11Core::Initialize(const HWND _hWnd)
 
 }
 
-void D3D11Core::BeginFrame()
+void D3D11Core::BeginFrame() const
 {
 	ID3D11RenderTargetView* rtvs[]{ backBufferView.get()};
 	deviceContext->OMSetRenderTargets(1, rtvs, NULL);
@@ -84,11 +84,11 @@ void D3D11Core::BeginFrame()
 	deviceContext->ClearRenderTargetView(backBufferView.get(), backgroundColor);
 }
 
-void D3D11Core::EndFrame()
+void D3D11Core::EndFrame() const
 {
 	swapChain->Present1(0, 0, &presentParams);
 }
 
-void D3D11Core::Finalize()
+void D3D11Core::Finalize() const
 {
 }

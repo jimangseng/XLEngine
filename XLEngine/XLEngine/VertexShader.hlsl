@@ -1,3 +1,9 @@
+cbuffer cbPerObject : register(b0)
+{
+	float4x4 WVPMatrix;
+};
+
+
 struct VS_In
 {
 	float4 position : POSITION;
@@ -13,7 +19,7 @@ struct VS_Out
 VS_Out main(VS_In vin)
 {
 	VS_Out vout;
-	vout.position = vin.position;
+	vout.position = mul(WVPMatrix, vin.position);
 	vout.color = vin.color;
 	
 	return vout;

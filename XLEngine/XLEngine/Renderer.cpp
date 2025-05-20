@@ -1,21 +1,31 @@
 #include "Renderer.h"
+
 #include <vector>
-#include "Scene.h"
-
-#include "Geometry.h"
-#include "Material.h"
-
 #include <memory>
 
-void Renderer::Initialize(D3D11Core & _core)
+#include "Scene.h"
+#include "Geometry.h"
+#include "Material.h"
+#include "SceneObject.h"
+
+
+
+void Renderer::Initialize(const D3D11Core& _core, const Builder& _builder)
 {
 	core = &_core;
+	builder = &_builder;
 
 	// cache d3d resources
 	device = core->GetDevice();
 	deviceContext = core->GetDeviceContext();
 	swapChain = core->GetSwapChain();
 	backBufferView = core->GetBackBufferVew();
+
+	// build and bind Constant Buffer
+	cbPerObject = _builder.BuildConsantBuffer();
+	ID3D11Buffer* CBs[]{ cbPerObject.get() };
+	deviceContext->VSSetConstantBuffers(0, 1, CBs);
+
 
 	ConfigurePipelineStates();
 }
@@ -28,7 +38,17 @@ void Renderer::Draw(Scene & _scene)
 	// render scene
 	for (auto& object : _scene.GetObjects())
 	{
+		// CB Update
+		D3D11_MAPPED_SUBRESOURCE mappedResource{};
+		Math::Matrix data = object->GetTransform().GetWVPMatrix();
+		deviceContext->Map(cbPerObject.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		memcpy(mappedResource.pData, &data, sizeof(Math::Matrix));
+		deviceContext->Unmap(cbPerObject.get(), 0);
+
+		// bind Objects
 		BindObjects(object);
+
+		// DP Call
 		deviceContext->DrawIndexed(static_cast<UINT>(object->GetNumIndices()), 0, 0);
 	}
 

@@ -7,7 +7,7 @@ SceneObject::SceneObject()
 	:geometry{},
 	material{},
 	numIndices{},
-	triangle{}
+	primitive{}
 {
 
 }

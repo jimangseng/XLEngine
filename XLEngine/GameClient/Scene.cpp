@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "Geometry.h"
-#include "Triangle.h"
+#include "PrimitiveFactory.h"
 #include "Transform.h"
 
 Scene::Scene()
@@ -19,31 +19,45 @@ void Scene::Initialize(Renderer& _renderer, Builder& _builder)
 	renderer = &_renderer;
 	builder = &_builder;
 
-	// triangle object
-	auto triangle = std::make_shared<Triangle>();
+	// make primitive factory
+	PrimitiveFactory primitiveFactory;
+
+	// get primitives from factory
+	auto triangle = primitiveFactory.CreatePrimitive(Primitives::Triangle);
+	auto quad = primitiveFactory.CreatePrimitive(Primitives::Quad);
+	auto cube = primitiveFactory.CreatePrimitive(Primitives::Cube);
 
 	// build geometry and material
-	auto geometry{ builder->BuildGeometry(triangle->GetVertices(), triangle->GetIndices()) };
-	auto material{ builder->BuildMaterial(triangle->GetLayout()) };
+	auto geometryTri{ builder->BuildGeometry(triangle->GetVertices(), triangle->GetIndices()) };
+	auto materialTri{ builder->BuildMaterial(triangle->GetLayout()) };
 
-	// set first object
-	auto obj1 = std::make_unique<SceneObject>();
-	obj1->SetGeometry(geometry);
-	obj1->SetMaterial(material);
+	auto geometryQuad{ builder->BuildGeometry(quad->GetVertices(), quad->GetIndices()) };
+	auto materialQuad{ builder->BuildMaterial(quad->GetLayout()) };
 
-	auto obj2 = std::make_unique<SceneObject>();
-	obj2->SetGeometry(geometry);
-	obj2->SetMaterial(material);
-	obj2->SetPosition(Math::Vector3{ 0.2f, 0.0f, 0.0f });
+	auto geometryCube{ builder->BuildGeometry(cube->GetVertices(), cube->GetIndices()) };
 
-	// add object to vector
-	objects.push_back(std::move(obj1));
-	objects.push_back(std::move(obj2));
+	// make 10 cubes
+	for (int i = 0; i < 10; ++i)
+	{
+		auto obj = std::make_unique<SceneObject>();
+
+		obj->SetGeometry(geometryCube);
+		obj->SetMaterial(materialQuad);
+		obj->Scale(0.1f);
+		obj->SetPosition(Math::Vector3{(i % 5)* 0.2f - 0.4f , ((i/5)-0.5f)*(-0.5f) , 0.0f});
+
+		objects.push_back(std::move(obj));
+	}
 }
 	
 void Scene::Update()
 {
-
+	// rotate 10 cubes
+	for (auto& object : objects)
+	{
+		object->Pitch(0.02f);
+		object->Yaw(0.02f);
+	}
 }
 
 void Scene::Render()

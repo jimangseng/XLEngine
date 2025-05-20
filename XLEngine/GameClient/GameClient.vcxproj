@@ -142,18 +142,20 @@
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="MathTypes.cpp" />
+    <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="PrimitiveFactory.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneObject.cpp" />
-    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="MathTypes.h" />
+    <ClInclude Include="Primitive.h" />
+    <ClInclude Include="PrimitiveFactory.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XLEngine\XLEngine.vcxproj">

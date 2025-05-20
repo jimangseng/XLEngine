@@ -4,6 +4,7 @@
 #include "Geometry.h"
 #include "Material.h"
 #include "SceneObject.h"
+#include "Builder.h"
 
 class Scene;
 
@@ -20,7 +21,7 @@ public:
 	Renderer& operator= (const Renderer&) = delete;
 
 public:
-	void Initialize(D3D11Core& _core);
+	void Initialize(const D3D11Core& _core, const Builder& _builder);
 	void Draw(Scene & _scene);
 	void Finalize();
 
@@ -29,7 +30,8 @@ private:
 	void BindObjects(const std::unique_ptr<SceneObject>& _object);
 
 private:
-	D3D11Core* core;
+	const D3D11Core* core;
+	const Builder* builder;
 
 	// cached d3d resources - Core의 책임 분리에 대해 생각해볼 것. 25. 5. 17. jimangseng
 	ID3D11Device* device;
@@ -37,5 +39,8 @@ private:
 	IDXGISwapChain1* swapChain;
 	ID3D11RenderTargetView* backBufferView;
 	HRESULT result;
+	// com_ptr로 바꾸기
+
+	winrt::com_ptr<ID3D11Buffer> cbPerObject;
 
 };

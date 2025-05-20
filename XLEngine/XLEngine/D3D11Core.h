@@ -23,9 +23,9 @@ public:
 
 public:
 	void Initialize(const HWND _hWnd);
-	void BeginFrame();
-	void EndFrame();
-	void Finalize();
+	void BeginFrame() const;
+	void EndFrame() const;
+	void Finalize() const;
 
 public:
 	ID3D11Device* GetDevice() const { return device.get(); }

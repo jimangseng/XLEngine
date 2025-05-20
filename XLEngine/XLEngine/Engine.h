@@ -27,7 +27,7 @@ public:
 	Renderer& GetRenderer() const { return *renderer.get(); }
 
 private:
-	std::shared_ptr<D3D11Core> core;
-	std::shared_ptr<Builder> builder;
-	std::shared_ptr<Renderer> renderer;
+	std::unique_ptr<D3D11Core> core;
+	std::unique_ptr<Builder> builder;
+	std::unique_ptr<Renderer> renderer;
 };

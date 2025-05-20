@@ -13,8 +13,9 @@
     <ClCompile Include="SceneObject.cpp">
       <Filter>02_Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="MathTypes.cpp" />
+    <ClCompile Include="PrimitiveFactory.cpp" />
+    <ClCompile Include="Primitive.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -29,9 +30,10 @@
     <ClInclude Include="SceneObject.h">
       <Filter>02_Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.h" />
     <ClInclude Include="MathTypes.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="PrimitiveFactory.h" />
+    <ClInclude Include="Primitive.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_GameApp">
