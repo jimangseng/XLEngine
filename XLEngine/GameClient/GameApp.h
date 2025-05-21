@@ -23,4 +23,9 @@ public:
 private:
 	Engine engine;
 	Scene currentScene;
+
+	std::chrono::time_point<std::chrono::steady_clock> previousFrameTime;
+	std::chrono::time_point<std::chrono::steady_clock> currentFrameTime;
+	std::chrono::duration<float> deltaTime;
+	float FPS;
 };

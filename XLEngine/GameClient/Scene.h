@@ -23,8 +23,8 @@ public:
 
 public:
 	void Initialize(Renderer& _renderer, Builder& _builder);
-	void Update();
-	void Render();
+	void Update(float _deltaTime);
+	void Render(float _deltaTime);
 	void Finalize();
 
 public:

@@ -13,9 +13,21 @@
     <ClCompile Include="SceneObject.cpp">
       <Filter>02_Scene</Filter>
     </ClCompile>
-    <ClCompile Include="MathTypes.cpp" />
-    <ClCompile Include="PrimitiveFactory.cpp" />
-    <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Geometry.cpp">
+      <Filter>03_Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>03_Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>04_Primtive</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveFactory.cpp">
+      <Filter>04_Primtive</Filter>
+    </ClCompile>
+    <ClCompile Include="MathTypes.cpp">
+      <Filter>05_Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -30,10 +42,24 @@
     <ClInclude Include="SceneObject.h">
       <Filter>02_Scene</Filter>
     </ClInclude>
-    <ClInclude Include="MathTypes.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="PrimitiveFactory.h" />
-    <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Geometry.h">
+      <Filter>03_Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>03_Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>04_Primtive</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveFactory.h">
+      <Filter>04_Primtive</Filter>
+    </ClInclude>
+    <ClInclude Include="MathTypes.h">
+      <Filter>05_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>05_Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_GameApp">
@@ -44,6 +70,15 @@
     </Filter>
     <Filter Include="02_Scene">
       <UniqueIdentifier>{c54ba48a-04fa-4c28-9e0c-8f984206cf84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_Components">
+      <UniqueIdentifier>{4a722836-ece0-46df-bd3a-7c8e28ea2337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Primtive">
+      <UniqueIdentifier>{2d04c14e-ff20-42a9-8eb5-410e3e88c5ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05_Math">
+      <UniqueIdentifier>{9f975b45-a451-472f-8661-116b43893d5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

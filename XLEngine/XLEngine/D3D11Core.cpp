@@ -4,6 +4,8 @@
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")
 
+#include "UI.h"
+
 void D3D11Core::Initialize(const HWND _hWnd)
 {
 	hWnd =_hWnd;
@@ -34,12 +36,12 @@ void D3D11Core::Initialize(const HWND _hWnd)
 	{
 		0,
 		0,
-		DXGI_FORMAT_R16G16B16A16_FLOAT,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
 		false,
 		{1, 0},
 		DXGI_USAGE_RENDER_TARGET_OUTPUT,
 		2,
-		DXGI_SCALING_STRETCH,
+		DXGI_SCALING_NONE,
 		DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL,
 		DXGI_ALPHA_MODE_IGNORE,
 		0
@@ -65,28 +67,42 @@ void D3D11Core::Initialize(const HWND _hWnd)
 	screenSize.width = static_cast<float>(tDesc.Width);
 	screenSize.height = static_cast<float>(tDesc.Height);
 
+	tDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	tDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
 	// create RTV
 	result = device->CreateRenderTargetView
 	(
 		backBuffer.get(),
-		NULL,
+		nullptr,
 		backBufferView.put()
 	);
 
+	/// For IMGUI Viewport
+	result = device->CreateTexture2D(&tDesc, nullptr, IMGUIViewportTexture.put());
+	result = device->CreateRenderTargetView(IMGUIViewportTexture.get(), nullptr, IMGUIViewportRTV.put());
+	result = device->CreateShaderResourceView(IMGUIViewportTexture.get(), nullptr, IMGUIViewportSRV.put());
 }
 
 void D3D11Core::BeginFrame() const
 {
-	ID3D11RenderTargetView* rtvs[]{ backBufferView.get()};
-	deviceContext->OMSetRenderTargets(1, rtvs, NULL);
+	UI::BeginFrame();
 
-	float backgroundColor[4]{ 0.05f, 0.05f, 0.05f, 1.0f };
-	deviceContext->ClearRenderTargetView(backBufferView.get(), backgroundColor);
+	ID3D11RenderTargetView* viewportRTV = IMGUIViewportRTV.get();
+	deviceContext->OMSetRenderTargets(1, &viewportRTV, nullptr);
+	deviceContext->ClearRenderTargetView(viewportRTV, backgroundColor);
 }
 
 void D3D11Core::EndFrame() const
 {
-	swapChain->Present1(0, 0, &presentParams);
+	ID3D11RenderTargetView* backBufferRTV = backBufferView.get();
+	deviceContext->OMSetRenderTargets(1, &backBufferRTV, nullptr);
+	deviceContext->ClearRenderTargetView(backBufferRTV, backgroundColor);
+
+	UI::EndFrame();
+
+	// present
+	swapChain->Present(1, 0);
 }
 
 void D3D11Core::Finalize() const

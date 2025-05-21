@@ -31,9 +31,14 @@ public:
 	ID3D11Device* GetDevice() const { return device.get(); }
 	ID3D11DeviceContext* GetDeviceContext() const { return deviceContext.get(); }
 	IDXGISwapChain1* GetSwapChain() const { return swapChain.get(); }
+	ID3D11Texture2D* GetBackBuffer() const { return backBuffer.get(); }
 	ID3D11RenderTargetView* GetBackBufferVew() const { return backBufferView.get(); }
+	ID3D11ShaderResourceView* GetBackBufferSRV() const { return backBufferSRV.get(); }
 	ScreenSize GetScreenSize() const { return screenSize; }
 	HWND GetWindowHandle() const { return hWnd; }
+
+	ID3D11RenderTargetView* GetViewportRTV() const { return IMGUIViewportRTV.get(); }
+	ID3D11ShaderResourceView* GetViewportSRV() const { return IMGUIViewportSRV.get(); }
 
 private:
 	// D3D ภฺฟ๘ต้
@@ -46,10 +51,19 @@ private:
 
 	winrt::com_ptr<ID3D11Texture2D> backBuffer;
 	winrt::com_ptr<ID3D11RenderTargetView> backBufferView;
+	winrt::com_ptr<ID3D11ShaderResourceView> backBufferSRV;
 
 	// misc
 	DXGI_PRESENT_PARAMETERS presentParams;
 	HRESULT result;
 	ScreenSize screenSize;
 	HWND hWnd;	// window handle
+
+
+	/// For IMGUI Viewport
+	winrt::com_ptr<ID3D11Texture2D> IMGUIViewportTexture;
+	winrt::com_ptr<ID3D11RenderTargetView> IMGUIViewportRTV;
+	winrt::com_ptr<ID3D11ShaderResourceView> IMGUIViewportSRV;
+
+	float backgroundColor[4]{ 0.05f, 0.05f, 0.05f, 1.0f };
 };

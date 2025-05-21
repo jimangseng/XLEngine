@@ -1,6 +1,8 @@
 #include "Engine.h"
+#include "UI.h"
 
-void Engine::Initialize(HWND hWnd)
+
+void Engine::Initialize(HWND hWnd)	
 {
 	core = std::make_unique<D3D11Core>();
 	core->Initialize(hWnd);
@@ -10,14 +12,23 @@ void Engine::Initialize(HWND hWnd)
 
 	renderer = std::make_unique<Renderer>();
 	renderer->Initialize(*core, *builder); // todo unique_ptr 전달로 수정할 것 25. 5. 20.
+
+	UI::Initialize(hWnd, *core);
+
+
 }
 
 void Engine::Update()
 {
 
+
+
 }
 
 void Engine::Finalize()
 {
+	core->Finalize();
+	//builder->Finalize();
 	renderer->Finalize();
+	UI::Finalize();
 }

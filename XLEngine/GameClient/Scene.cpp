@@ -50,17 +50,17 @@ void Scene::Initialize(Renderer& _renderer, Builder& _builder)
 	}
 }
 	
-void Scene::Update()
+void Scene::Update(float _deltaTime)
 {
 	// rotate 10 cubes
 	for (auto& object : objects)
 	{
-		object->Pitch(0.02f);
-		object->Yaw(0.02f);
+		object->Pitch(1.0f * _deltaTime);
+		object->Yaw(1.0f * _deltaTime);
 	}
 }
 
-void Scene::Render()
+void Scene::Render(float _deltaTime)
 {
 	renderer->Draw(*this);
 }

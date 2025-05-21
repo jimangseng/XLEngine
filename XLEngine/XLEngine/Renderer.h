@@ -43,4 +43,7 @@ private:
 
 	winrt::com_ptr<ID3D11Buffer> cbPerObject;
 
+	// For IMGUI Viewport
+	ID3D11ShaderResourceView* renderSRV;
+
 };

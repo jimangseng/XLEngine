@@ -141,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MathTypes.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="PrimitiveFactory.cpp" />
@@ -150,6 +152,8 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="MathTypes.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="PrimitiveFactory.h" />

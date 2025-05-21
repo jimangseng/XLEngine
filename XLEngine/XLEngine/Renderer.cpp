@@ -8,6 +8,12 @@
 #include "Material.h"
 #include "SceneObject.h"
 
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
+#include "UI.h"
+#include "D3D11Common.h"
 
 
 void Renderer::Initialize(const D3D11Core& _core, const Builder& _builder)
@@ -21,6 +27,9 @@ void Renderer::Initialize(const D3D11Core& _core, const Builder& _builder)
 	swapChain = core->GetSwapChain();
 	backBufferView = core->GetBackBufferVew();
 
+	// for IMGUI Viewport
+	renderSRV = core->GetViewportSRV();
+
 	// build and bind Constant Buffer
 	cbPerObject = _builder.BuildConsantBuffer();
 	ID3D11Buffer* CBs[]{ cbPerObject.get() };
@@ -32,27 +41,30 @@ void Renderer::Initialize(const D3D11Core& _core, const Builder& _builder)
 
 void Renderer::Draw(Scene & _scene)
 {
-	// bind and clear backbuffer
 	core->BeginFrame();
 
-	// render scene
+	// update and draw objects
 	for (auto& object : _scene.GetObjects())
 	{
-		// CB Update
-		D3D11_MAPPED_SUBRESOURCE mappedResource{};
 		Math::Matrix data = object->GetTransform().GetWVPMatrix();
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource{};
 		deviceContext->Map(cbPerObject.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		memcpy(mappedResource.pData, &data, sizeof(Math::Matrix));
 		deviceContext->Unmap(cbPerObject.get(), 0);
 
-		// bind Objects
 		BindObjects(object);
-
-		// DP Call
 		deviceContext->DrawIndexed(static_cast<UINT>(object->GetNumIndices()), 0, 0);
 	}
 
-	// present
+	// draw IMGUI viewport
+	ImGui::Begin("Viewport");
+	ImGui::Image((ImTextureID)renderSRV, ImGui::GetContentRegionAvail());
+	ImGui::End();
+
+	// draw demo window
+	UI::DrawDemo();
+
 	core->EndFrame();
 }
 

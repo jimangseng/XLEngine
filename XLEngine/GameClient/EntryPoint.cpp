@@ -1,6 +1,10 @@
 #include "framework.h"
 #include "GameApp.h"
 
+#include "../imgui/imgui.h"
+#include "../imgui/backends/imgui_impl_win32.h"
+#include "../imgui/backends/imgui_impl_dx11.h"
+
 /*
 * Windows 어플리케이션 진입점.
 * 25. 5. 15. jimangseng
@@ -14,6 +18,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
+	ImGui_ImplWin32_EnableDpiAwareness();
+
 	HWND hWnd = InitializeWindow(hInstance, nCmdShow);
 	MSG msg;
 
@@ -25,14 +31,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	while (true)
 	{
-		PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE);
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+				break;
 
-		if (msg.message == WM_QUIT)
-			break;
-
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		
 		// GameApp Update
 		gameApp.Update();
 	}
@@ -43,19 +50,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	return (int)msg.wParam;
 }
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return (LRESULT)1;
+
 	switch (message)
 	{
-	case WM_MOUSEMOVE:
-		//XL::GamePlay::InputManager::mouseX = LOWORD(lParam);
-		//XL::GamePlay::InputManager::mouseY = HIWORD(lParam);
-		break;
-
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		break;
+		return 0;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -67,7 +73,7 @@ HWND InitializeWindow(HINSTANCE hInstance, int nCmdShow)
 {
 	WNDCLASSEXW wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
-	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.style = CS_CLASSDC | CS_OWNDC;
 	wcex.lpfnWndProc = WndProc;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
@@ -82,9 +88,10 @@ HWND InitializeWindow(HINSTANCE hInstance, int nCmdShow)
 	RegisterClassExW(&wcex);
 
 	HWND hWnd = CreateWindowW(TEXT("XLEngine"), TEXT("XLEngine"), WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+		100, 100, 720, 480, nullptr, nullptr, hInstance, nullptr);
 
-	ShowWindow(hWnd, nCmdShow);
+	//ShowWindow(hWnd, nCmdShow);
+	ShowWindow(hWnd, SW_HIDE);
 	UpdateWindow(hWnd);
 
 	return hWnd;
