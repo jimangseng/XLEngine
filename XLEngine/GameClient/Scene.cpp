@@ -6,13 +6,6 @@
 #include "PrimitiveFactory.h"
 #include "Transform.h"
 
-Scene::Scene()
-	: renderer{ },
-	builder{},
-	objects{ }
-{
-}
-
 void Scene::Initialize(Renderer& _renderer, Builder& _builder)
 {
 	// receivce renderer pointer to member

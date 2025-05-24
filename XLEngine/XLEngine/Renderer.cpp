@@ -1,6 +1,5 @@
 #include "Renderer.h"
 
-#include <vector>
 #include <memory>
 
 #include "Scene.h"
@@ -8,33 +7,23 @@
 #include "Material.h"
 #include "SceneObject.h"
 
-#include "imgui.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_impl_win32.h"
-
 #include "UI.h"
 #include "D3D11Common.h"
 
+#include "DebugLog.h"
 
-void Renderer::Initialize(const D3D11Core& _core, const Builder& _builder)
+void Renderer::Initialize(D3D11Core& _core, Builder& _builder)
 {
-	core = &_core;
-	builder = &_builder;
+	this->core = &_core;	// todo 25. 5. 23.
 
 	// cache d3d resources
 	device = core->GetDevice();
 	deviceContext = core->GetDeviceContext();
-	swapChain = core->GetSwapChain();
-	backBufferView = core->GetBackBufferVew();
-
-	// for IMGUI Viewport
-	renderSRV = core->GetViewportSRV();
 
 	// build and bind Constant Buffer
 	cbPerObject = _builder.BuildConsantBuffer();
 	ID3D11Buffer* CBs[]{ cbPerObject.get() };
 	deviceContext->VSSetConstantBuffers(0, 1, CBs);
-
 
 	ConfigurePipelineStates();
 }
@@ -44,7 +33,7 @@ void Renderer::Draw(Scene & _scene)
 	core->BeginFrame();
 
 	// update and draw objects
-	for (auto& object : _scene.GetObjects())
+	for (auto& object : _scene.GetObjects())	// SceneObject의 소유권 문제에 대해 생각해보기 // 25. 5. 24.
 	{
 		Math::Matrix data = object->GetTransform().GetWVPMatrix();
 
@@ -57,13 +46,14 @@ void Renderer::Draw(Scene & _scene)
 		deviceContext->DrawIndexed(static_cast<UINT>(object->GetNumIndices()), 0, 0);
 	}
 
-	// draw IMGUI viewport
-	ImGui::Begin("Viewport");
-	ImGui::Image((ImTextureID)renderSRV, ImGui::GetContentRegionAvail());
-	ImGui::End();
-
-	// draw demo window
+	// draw UI
+	UI::DrawDockSpace(*core);
+	UI::DrawSceneViewport(*core);
+	UI::DrawInspector();
 	UI::DrawDemo();
+
+	// render Debug Log Panel
+	DebugLog::DrawPanel();
 
 	core->EndFrame();
 }
@@ -83,7 +73,7 @@ void Renderer::ConfigurePipelineStates()
 	rasterDesc.DepthClipEnable = false;
 
 	winrt::com_ptr<ID3D11RasterizerState> rasterizerState{}; // Material에 들어가야 하나?
-	result = device->CreateRasterizerState(&rasterDesc, rasterizerState.put());
+	HRESULT result = device->CreateRasterizerState(&rasterDesc, rasterizerState.put());
 	deviceContext->RSSetState(rasterizerState.get());
 
 	// Viewport

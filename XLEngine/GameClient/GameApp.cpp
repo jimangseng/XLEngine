@@ -1,6 +1,8 @@
 #include <iostream>
 #include "GameApp.h"
 #include "Engine.h"
+#include "InputManager.h"
+#include "DebugLog.h"
 
 void GameApp::Initialize(HWND hWnd)
 {
@@ -15,14 +17,20 @@ void GameApp::Initialize(HWND hWnd)
 void GameApp::Update()
 {
 	engine.Update();
-
+	
+	// Scene
 	currentScene.Update(deltaTime.count());
 	currentScene.Render(deltaTime.count());
-	
+
+	// Input
+	InputManager::Update();
+
+	// Timer
 	currentFrameTime = std::chrono::steady_clock().now();
 	deltaTime = currentFrameTime - previousFrameTime;
-	std::cout << "DeltaTime: " << deltaTime.count();
-	std::cout << "   FPS: " << 1.0f / deltaTime.count() << std::endl;
+	
+	DebugLog::Add("DeltaTime: " + std::to_string(deltaTime.count()) + '\n');
+	DebugLog::Add("FPS: " + std::to_string(1.0f / deltaTime.count()) + '\n');
 
 	previousFrameTime = std::chrono::steady_clock().now();
 }

@@ -29,8 +29,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// GameApp Initialize
 	gameApp.Initialize(hWnd);
 
+	// Game Loop
 	while (true)
 	{
+		// Process Window Message
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT)
@@ -54,6 +56,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT mes
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	// IMGUI hook
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 		return (LRESULT)1;
 
@@ -73,7 +76,7 @@ HWND InitializeWindow(HINSTANCE hInstance, int nCmdShow)
 {
 	WNDCLASSEXW wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
-	wcex.style = CS_CLASSDC | CS_OWNDC;
+	wcex.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC | CS_OWNDC;
 	wcex.lpfnWndProc = WndProc;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
@@ -88,10 +91,10 @@ HWND InitializeWindow(HINSTANCE hInstance, int nCmdShow)
 	RegisterClassExW(&wcex);
 
 	HWND hWnd = CreateWindowW(TEXT("XLEngine"), TEXT("XLEngine"), WS_OVERLAPPEDWINDOW,
-		100, 100, 720, 480, nullptr, nullptr, hInstance, nullptr);
+		100, 100, 1280, 720, nullptr, nullptr, hInstance, nullptr);
 
-	//ShowWindow(hWnd, nCmdShow);
-	ShowWindow(hWnd, SW_HIDE);
+	//ShowWindow(hWnd, SW_HIDE);
+	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
 	return hWnd;

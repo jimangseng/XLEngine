@@ -14,13 +14,13 @@ std::shared_ptr<Material> Builder::BuildMaterial(std::vector<D3D11_INPUT_ELEMENT
 
 	// vertex shader
 	winrt::com_ptr<ID3DBlob> vsBlob{};
-	D3DReadFileToBlob(L"../x64/Debug/VertexShader.cso", vsBlob.put());
+	D3DReadFileToBlob(L"C:/XLEngine/XLEngine/Shader/VertexShader.cso", vsBlob.put());
 	winrt::com_ptr<ID3D11VertexShader> vertexShader;
 	result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, vertexShader.put());
 
 	// pixel shader
 	winrt::com_ptr<ID3DBlob> psBlob{};
-	D3DReadFileToBlob(L"../x64/Debug/PixelShader.cso", psBlob.put());
+	D3DReadFileToBlob(L"C:/XLEngine/XLEngine/Shader/PixelShader.cso", psBlob.put());
 	winrt::com_ptr<ID3D11PixelShader> pixelShader;
 	result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, pixelShader.put());
 

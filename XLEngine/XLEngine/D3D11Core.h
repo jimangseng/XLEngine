@@ -40,6 +40,8 @@ public:
 	ID3D11RenderTargetView* GetViewportRTV() const { return IMGUIViewportRTV.get(); }
 	ID3D11ShaderResourceView* GetViewportSRV() const { return IMGUIViewportSRV.get(); }
 
+	void ResizeRenderTarget(float _width, float _height);
+
 private:
 	// D3D ภฺฟ๘ต้
 	winrt::com_ptr<ID3D11Device> device;

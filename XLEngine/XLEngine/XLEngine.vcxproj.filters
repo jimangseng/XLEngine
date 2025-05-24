@@ -44,8 +44,11 @@
       <Filter>10_IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
-      <Filter>UI</Filter>
+      <Filter>6_UI</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="DebugLog.h" />
+    <ClInclude Include="CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11Core.cpp">
@@ -85,8 +88,11 @@
       <Filter>10_IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp">
-      <Filter>UI</Filter>
+      <Filter>6_UI</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="DebugLog.cpp" />
+    <ClCompile Include="CameraController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1_Renderer">
@@ -110,7 +116,7 @@
     <Filter Include="10_IMGUI">
       <UniqueIdentifier>{e66634c8-1f5d-4388-8175-8d31ed4f4510}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
+    <Filter Include="6_UI">
       <UniqueIdentifier>{ce53054d-b55b-4e1c-a9e7-ad902c6fd06d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

@@ -1,17 +1,18 @@
 #include <Windows.h>
 #include "D3D11Core.h"
 #include "UI.h"
+#include "InputManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
-
 
 void UI::Initialize(HWND _hWnd, const D3D11Core& _core)
 {
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -49,6 +50,73 @@ void UI::EndFrame()
 void UI::DrawDemo()
 {
 	ImGui::ShowDemoWindow(); // Show demo window! :)
+}
+
+void UI::DrawDockSpace(D3D11Core& _core)
+{
+	ImGuiIO& io = ImGui::GetIO();
+
+	// Docking을 사용하지 않으면 리턴
+	if (!(io.ConfigFlags & ImGuiConfigFlags_DockingEnable))
+		return;
+
+	// 기본 창 플래그 설정
+	ImGuiWindowFlags window_flags =
+		ImGuiWindowFlags_MenuBar |
+		ImGuiWindowFlags_NoDocking |
+		ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoBringToFrontOnFocus |
+		ImGuiWindowFlags_NoNavFocus;
+
+	// 메인 뷰포트 크기에 맞춰 전체 창 덮기
+	const ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+
+	// resize 트리거
+	static ImVec2 lastSize = ImVec2(0, 0);
+	ImVec2 newSize = viewport->Size;
+
+	if (newSize.x != lastSize.x || newSize.y != lastSize.y)
+	{
+		_core.ResizeRenderTarget(newSize.x, newSize.y);
+		lastSize = newSize;
+	}
+
+	// DockSpace 생성
+	ImGui::Begin("DockSpace Root", nullptr, window_flags);
+
+	ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+	ImGui::End();
+}
+
+void UI::DrawSceneViewport(const D3D11Core& _core)
+{
+	ImGuiIO& io = ImGui::GetIO();
+
+	// draw IMGUI viewport
+	ImGui::Begin("Scene");
+
+	InputManager::sceneViewportFocused = ImGui::IsWindowFocused();
+	InputManager::sceneViewportHovered = ImGui::IsWindowHovered();
+	ImVec2 gameMousePos = ImGui::GetMousePos();
+
+	ImGui::Image((ImTextureID)_core.GetViewportSRV(), ImGui::GetContentRegionAvail());
+
+	ImGui::End();
+
+}
+
+void UI::DrawInspector()
+{
+	ImGui::Begin("Inspector");
+	ImGui::Text("inspector");
+	ImGui::End();
 }
 
 void UI::Finalize()

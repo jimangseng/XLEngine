@@ -71,12 +71,7 @@ void D3D11Core::Initialize(const HWND _hWnd)
 	tDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
 	// create RTV
-	result = device->CreateRenderTargetView
-	(
-		backBuffer.get(),
-		nullptr,
-		backBufferView.put()
-	);
+	result = device->CreateRenderTargetView(backBuffer.get(), nullptr, backBufferView.put());
 
 	/// For IMGUI Viewport
 	result = device->CreateTexture2D(&tDesc, nullptr, IMGUIViewportTexture.put());
@@ -88,6 +83,7 @@ void D3D11Core::BeginFrame() const
 {
 	UI::BeginFrame();
 
+	// IMGUI의 Scene Viewport에 렌더
 	ID3D11RenderTargetView* viewportRTV = IMGUIViewportRTV.get();
 	deviceContext->OMSetRenderTargets(1, &viewportRTV, nullptr);
 	deviceContext->ClearRenderTargetView(viewportRTV, backgroundColor);
@@ -95,9 +91,15 @@ void D3D11Core::BeginFrame() const
 
 void D3D11Core::EndFrame() const
 {
+	// 백버퍼에 더미 렌더
 	ID3D11RenderTargetView* backBufferRTV = backBufferView.get();
+
+	if (backBufferRTV == nullptr)
+		return;
+
 	deviceContext->OMSetRenderTargets(1, &backBufferRTV, nullptr);
 	deviceContext->ClearRenderTargetView(backBufferRTV, backgroundColor);
+
 
 	UI::EndFrame();
 
@@ -107,4 +109,28 @@ void D3D11Core::EndFrame() const
 
 void D3D11Core::Finalize() const
 {
+}
+
+void D3D11Core::ResizeRenderTarget(float _width, float _height)
+{
+	if (_width == 0 || _height == 0)
+		return;
+
+	// 기존 바인딩 해제
+	deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
+	// 기존 백버퍼 뷰 해제
+	backBufferView = nullptr;
+	backBuffer = nullptr;
+
+	// 스왑체인 리사이즈
+	HRESULT hr = swapChain->ResizeBuffers(0, static_cast<float>(_width), static_cast<float>(_height), DXGI_FORMAT_UNKNOWN, 0);
+	if (FAILED(hr)) return;
+
+	// 새로운 백버퍼 가져오기
+	result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), backBuffer.put_void());
+
+	// 새로운 RTV 생성
+	hr = device->CreateRenderTargetView(backBuffer.get(), nullptr, backBufferView.put());
+	if (FAILED(hr)) return;
 }

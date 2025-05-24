@@ -16,7 +16,7 @@ class Renderer;
 class Scene
 {
 public:
-	Scene();
+	Scene() = default;
 	~Scene() = default;
 	Scene(const Scene&) = delete;	// 씬은 복사 가능해야 하는가? 25. 5. 17.
 	Scene& operator= (const Scene&) = delete;
@@ -28,6 +28,7 @@ public:
 	void Finalize();
 
 public:
+	// 왜 유니크 포인터를 사용해야 하는가?
 	const std::vector<std::unique_ptr<SceneObject>>& GetObjects() const { return objects; }
 
 private:
